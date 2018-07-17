@@ -26,6 +26,8 @@ namespace GaoJD.Club.OneTest.Controllers
         int aaa = 5;
 
 
+
+
         private readonly IUserLogic _UserLogic;
         AppConfigurtaionServices _AppConfigurtaionServices;
         private ILogger _Logger;
