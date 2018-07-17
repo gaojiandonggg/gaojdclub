@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GaoJD.Club.BusinessEntity\GaoJD.Club.BusinessEntity.csproj" />
+    <ProjectReference Include="..\GaoJD.Club.Repository\GaoJD.Club.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
