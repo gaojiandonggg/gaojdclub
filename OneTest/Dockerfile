@@ -6,6 +6,6 @@ COPY ./bin/Debug/netcoreapp2.1/publish/  /onetest/
 WORKDIR /onetest
 # 设置导出端口
 EXPOSE 9998/tcp
-ENV ASPNETCORE_URLS=http://*:9998 ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://*:9997 ASPNETCORE_ENVIRONMENT=Development
 # 指定应用入口点
 ENTRYPOINT ["dotnet", "/onetest/GaoJD.Club.OneTest.dll"]
