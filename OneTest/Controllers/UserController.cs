@@ -46,6 +46,8 @@ namespace GaoJD.Club.OneTest.Controllers
         {
             try
             {
+                //_accessor.HttpContext.Session.SetString("aaa", "bbb");
+                //HttpContext.Session.SetString("aaa", "bbb");
                 _UserLogic.Insert(usr);
                 var httpcontext = _accessor.HttpContext;
                 _Logger.AddOperate<User>("测试", usr);

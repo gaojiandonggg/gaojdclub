@@ -52,25 +52,26 @@ namespace OneTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-           // if (_DataBaseProvider._isSqlServer)
-           // {
-           //     services.AddDbContext<ReadSqlServerContext>(opt =>
-           //   opt.UseSqlServer(Configuration.GetConnectionString("ReadSqlServerConnection")));
+            // if (_DataBaseProvider._isSqlServer)
+            // {
+            //     services.AddDbContext<ReadSqlServerContext>(opt =>
+            //   opt.UseSqlServer(Configuration.GetConnectionString("ReadSqlServerConnection")));
 
-           //     services.AddDbContext<WriteSqlServerContext>(opt =>
-           // opt.UseSqlServer(Configuration.GetConnectionString("WriteSqlServerConnection")));
+            //     services.AddDbContext<WriteSqlServerContext>(opt =>
+            // opt.UseSqlServer(Configuration.GetConnectionString("WriteSqlServerConnection")));
 
 
-           // }
-           // else if (_DataBaseProvider._isMySql)
-           // {
-           //     services.AddDbContext<TeacherClubContext>(options =>
-           //options.UseMySql(Configuration.GetConnectionString("MySqlConnection")));
+            // }
+            // else if (_DataBaseProvider._isMySql)
+            // {
+            //     services.AddDbContext<TeacherClubContext>(options =>
+            //options.UseMySql(Configuration.GetConnectionString("MySqlConnection")));
 
-           // }
+            // }
 
             services.AddLogger();
 
+            services.AddSession();
 
             // services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
             //   .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
@@ -153,6 +154,9 @@ namespace OneTest
             });
             app.UseStaticHttpContext();
             OpenConfiguration.Configure(Configuration);
+
+
+            app.UseSession();
 
             app.UseHttpsRedirection();
 
