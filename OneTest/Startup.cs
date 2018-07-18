@@ -27,6 +27,8 @@ namespace OneTest
 {
     public class Startup
     {
+
+
         private DataBaseProvider _DataBaseProvider;
         public static ILoggerRepository repository { get; set; }
         public Startup(IConfiguration configuration)
