@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Notify";
+}
+<h2>Notify</h2>
+
+
+<div>
+    <div style="width:30%; float:left; height:600px;">
+        <div>
+            房间名：  <input type="text" id="room" /><input type="button" value="创建" id="createRoom" />
+        </div>
+        <div>
+            <ul id="RoomList"></ul>
+
+        </div>
+
+    </div>
+    <div style="width:30%; float:left; height:600px;">
+
+    </div>
+    <div style="width:30%; float:left; height:600px;">
+
+    </div>
+</div>
+
+
+
+<ul id="messages-list"></ul>
+@section Scripts {
+<script src="/signalr/signalr.js"></script>
+<script type="text/javascript">
+
+    var messagesList = document.getElementById("messages-list");
+
+    function appendMessage(content) {
+        var li = document.createElement("li");
+        li.innerText = content;
+        messagesList.appendChild(li);
+    }
+
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/ChatHub")
+        .build();
+
+    connection.on("Notify", function (message) {
+        appendMessage(message)
+    });
+
+    connection.start();
+
+
+    //创建(组)
+    document.getElementById("createRoom").addEventListener("click", event => {
+        const roomName = document.getElementById("room").value;
+        connection.invoke("CreatRoom", roomName).catch(err => console.error(err.toString()));
+        event.preventDefault();
+    });
+
+
+
+    connection.on("getRoomlist", (message) => {
+
+        debugger;
+        alert(message);
+        console.log(message);
+        var data = message;
+        for (var i = 0; i < data.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = data[i].RoomName;
+            document.getElementById("RoomList").appendChild(li);
+        }
+    });
+
+
+</script>
+}
+

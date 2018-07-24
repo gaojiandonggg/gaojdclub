@@ -1,0 +1,141 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="container">
+    <div class="row">组管理</div>
+    <hr />
+    <div class="row">
+
+        <div class="col-6">
+            姓名:<input type="text" id="UserName" />
+            <br />
+            组名称:<input type="text" id="groupName" />  <input type="button" id="joinGroup" value="加入" />
+            <input type="button" id="RemoveGroup" value="退出" />
+            <br />
+            内容: <input type="text" id="messageGroupInput" />
+            <input type="button" id="sendGroupButton" value="Send Message" />
+        </div>
+        <div class="col-6">
+            <ul id="groupList"></ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            组接收到的信息:
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">&nbsp;</div>
+        <div class="col-6">
+            <ul id="messagesGroupList"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="container">
+    <div class="row">connectionId发送</div>
+    <div class="row">
+        <div class="col-6">
+            connectionId：<input type="text" id="connectionId" />
+            <br />
+            内容 <input type="text" id="messageInput" />
+            <input type="button" id="sendButton" value="Send Message" />
+        </div>
+        <div class="col-6">
+            <ul id="groupClientList"></ul>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/signalr/signalr.js"></script>
+@*
+    <script src="~/js/chat.js"></script>*@
+
+
+<script>
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chatHub")
+        .build();
+
+
+
+    connection.on("ReceiveGroupMessage", (UserName, message) => {
+        const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const encodedMsg = UserName + " says " + msg;
+        const li = document.createElement("li");
+        li.textContent = encodedMsg;
+        document.getElementById("messagesGroupList").appendChild(li);
+    });
+
+    connection.on("Send", (UserName, message, connectionId) => {
+        const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const encodedMsg = msg;
+        const li = document.createElement("li");
+        li.textContent = encodedMsg;
+        li.value = connectionId;
+        document.getElementById("groupList").appendChild(li);
+    });
+
+
+
+
+    connection.start().catch(err => console.error(err.toString()));
+
+    //发送消息(组)
+    document.getElementById("sendGroupButton").addEventListener("click", event => {
+        const UserName = document.getElementById("UserName").value;
+        const groupName = document.getElementById("groupName").value;
+        const message = document.getElementById("messageGroupInput").value;
+        connection.invoke("SendMessageToGroup", groupName, UserName, message).catch(err => console.error(err.toString()));
+        event.preventDefault();
+    });
+
+    //加入到指定组
+    document.getElementById("joinGroup").addEventListener("click", event => {
+        const groupName = document.getElementById("groupName").value;
+        const UserName = document.getElementById("UserName").value;
+        connection.invoke("AddToGroup", groupName, UserName).catch(err => console.error(err.toString()));
+        event.preventDefault();
+    });
+
+    //退出指定组
+    document.getElementById("RemoveGroup").addEventListener("click", event => {
+        const groupName = document.getElementById("groupName").value;
+        const UserName = document.getElementById("UserName").value;
+        connection.invoke("RemoveFromGroup", groupName, UserName).catch(err => console.error(err.toString()));
+        event.preventDefault();
+    });
+
+
+
+
+    //发送connectionId消息
+    document.getElementById("sendButton").addEventListener("click", event => {
+        const connectionId = document.getElementById("connectionId").value;
+        const messageInput = document.getElementById("messageInput").value;
+        connection.invoke("SendClientMessage", connectionId, messageInput).catch(err => console.error(err.toString()));
+        event.preventDefault();
+    });
+
+
+    connection.on("ReceiveClientMessage", (connectionId, message) => {
+        const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const encodedMsg = connectionId + "  say  " + msg;
+        const li = document.createElement("li");
+        li.textContent = encodedMsg;
+        li.value = connectionId;
+        document.getElementById("groupClientList").appendChild(li);
+    });
+
+
+
+</script>
+
