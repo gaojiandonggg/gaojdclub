@@ -13,9 +13,6 @@ namespace SignalRDemo.Common
         public static UserContext db = new UserContext();
 
 
-
-
-
         /// <summary>
         /// 单个发送
         /// </summary>
@@ -109,11 +106,9 @@ namespace SignalRDemo.Common
                 foreach (var item in user.Rooms)
                 {
                     RemoveFromRoom(item.RoomName);
-
                 }
             }
-
-
+            GetRoomList();
             await base.OnDisconnectedAsync(exception);
         }
 
@@ -124,7 +119,6 @@ namespace SignalRDemo.Common
         /// <param name="roomName"></param>
         public void RemoveFromRoom(string roomName)
         {
-
             //查找房间是否存在
             var room = db.Rooms.Find(a => a.RoomName == roomName);
             //存在则进入删除
@@ -140,19 +134,11 @@ namespace SignalRDemo.Common
                     db.Rooms.Remove(room);
                 }
                 Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+                GetUsersList(roomName);
                 //提示客户端
                 // Clients.Client(Context.ConnectionId).removeRoom("退出成功!");
             }
-
-
         }
-
-
-
-
-
-
-
 
 
         /// <summary>
@@ -175,9 +161,8 @@ namespace SignalRDemo.Common
             }
             else
             {
-
+                Clients.Clients(Context.ConnectionId).SendAsync("alertMsg", "名称已存在");
             }
-
         }
 
         /// <summary>
@@ -190,6 +175,21 @@ namespace SignalRDemo.Common
                        select new { a.RoomName };
             string jsondata = JsonConvert.SerializeObject(itme.ToList());
             Clients.All.SendAsync("getRoomlist", jsondata);
+
+        }
+
+
+        /// <summary>
+        /// 更新所有用户的房间列表
+        /// </summary>
+        private void GetUsersList(string Room)
+        {
+            var room = db.Rooms.Where(p => p.RoomName == Room).SingleOrDefault();
+            var users = room?.Users;
+            var item = from a in users
+                       select new { a.UserName };
+            string jsondata = JsonConvert.SerializeObject(item.ToList());
+            Clients.Group(Room).SendAsync("getUserlist", jsondata);
 
         }
 
@@ -214,11 +214,14 @@ namespace SignalRDemo.Common
                     user.Rooms.Add(room);
                     room.Users.Add(user);
                     Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+
+                    GetUsersList(roomName);
                 }
                 else
                 {
-
+                    Clients.Clients(Context.ConnectionId).SendAsync("alertMsg", "已在聊天室当中");
                 }
+
             }
         }
 

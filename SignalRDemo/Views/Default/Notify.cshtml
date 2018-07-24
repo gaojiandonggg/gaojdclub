@@ -1,77 +1,142 @@
 ﻿@{
     ViewData["Title"] = "Notify";
 }
-<h2>Notify</h2>
-
-
 <div>
+    名称 <input type="text" id="UserName" />
+</div>
+
+<div style="margin-top:100px;">
+
     <div style="width:30%; float:left; height:600px;">
         <div>
             房间名：  <input type="text" id="room" /><input type="button" value="创建" id="createRoom" />
         </div>
+
+        <hr />
         <div>
-            <ul id="RoomList"></ul>
+            <p>房间列表：</p>
+            <div id="RoomList">
+
+            </div>
 
         </div>
 
     </div>
-    <div style="width:30%; float:left; height:600px;">
+    <div style="width:50%; float:left; height:600px; border:2px solid black; padding:5px 5px;">
 
-    </div>
-    <div style="width:30%; float:left; height:600px;">
+        <div style="width:70%; float:left; height:590px; border-right:1px solid black;">
+            <div>
+                房间名：  <input type="text" id="groupName" value="第一组" />
+            </div>
+            <br />
 
+            <div>
+                <p>聊天信息：</p>
+                <ul id="RoomInfo"></ul>
+
+            </div>
+            <div>
+                <input type="text" id="message" /> <input type="button" id="sendGroupButton" value="发送" />
+            </div>
+
+        </div>
+        <div style=" width:30%; float:left; height:600px;">
+            <div style="margin-left:20px;">
+                <p>用户列表：</p>
+                <ul id="userInfo"></ul>
+            </div>
+
+        </div>
     </div>
+
 </div>
-
+<div style="clear:both;"></div>
 
 
 <ul id="messages-list"></ul>
 @section Scripts {
-<script src="/signalr/signalr.js"></script>
-<script type="text/javascript">
+    <script src="/signalr/signalr.js"></script>
+    <script type="text/javascript">
 
-    var messagesList = document.getElementById("messages-list");
+        var messagesList = document.getElementById("messages-list");
 
-    function appendMessage(content) {
-        var li = document.createElement("li");
-        li.innerText = content;
-        messagesList.appendChild(li);
-    }
-
-    var connection = new signalR.HubConnectionBuilder()
-        .withUrl("/ChatHub")
-        .build();
-
-    connection.on("Notify", function (message) {
-        appendMessage(message)
-    });
-
-    connection.start();
-
-
-    //创建(组)
-    document.getElementById("createRoom").addEventListener("click", event => {
-        const roomName = document.getElementById("room").value;
-        connection.invoke("CreatRoom", roomName).catch(err => console.error(err.toString()));
-        event.preventDefault();
-    });
-
-
-
-    connection.on("getRoomlist", (message) => {
-
-        debugger;
-        alert(message);
-        console.log(message);
-        var data = message;
-        for (var i = 0; i < data.length; i++) {
-            const li = document.createElement("li");
-            li.textContent = data[i].RoomName;
-            document.getElementById("RoomList").appendChild(li);
+        function appendMessage(content) {
+            var li = document.createElement("li");
+            li.innerText = content;
+            messagesList.appendChild(li);
         }
-    });
+
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/ChatHub")
+            .build();
+
+        connection.on("Notify", function (message) {
+            appendMessage(message)
+        });
+
+        connection.start();
 
 
-</script>
+        //创建(组)
+        document.getElementById("createRoom").addEventListener("click", event => {
+            const roomName = document.getElementById("room").value;
+            connection.invoke("CreatRoom", roomName).catch(err => console.error(err.toString()));
+            event.preventDefault();
+        });
+
+
+        connection.on("getRoomlist", (message) => {
+            var data = $.parseJSON(message);
+            $("#RoomList").html("");
+            for (var i = 0; i < data.length; i++) {
+                var html = "<span>" + data[i].RoomName + "</span>";
+                html += '<input type="button" value="加入" onclick="join(this)">';
+
+                $("#RoomList").append(html);
+            }
+        });
+
+        function join(e) {
+            const groupName = $(e).prev().text();
+            connection.invoke("AddToRoom", groupName).catch(err => console.error(err.toString()));
+            event.preventDefault();
+        }
+
+
+        //发送消息(组)
+        document.getElementById("sendGroupButton").addEventListener("click", event => {
+            const UserName = document.getElementById("UserName").value;
+            const groupName = document.getElementById("groupName").value;
+            const message = document.getElementById("message").value;
+            connection.invoke("SendMessageToGroup", groupName, UserName, message).catch(err => console.error(err.toString()));
+            event.preventDefault();
+        });
+
+
+        connection.on("ReceiveGroupMessage", (UserName, message) => {
+            const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const encodedMsg = UserName + " says " + msg;
+            const li = document.createElement("li");
+            li.textContent = encodedMsg;
+            document.getElementById("RoomInfo").appendChild(li);
+        });
+
+
+        connection.on("getUserlist", (message) => {
+            $("#userInfo").html();
+            var data = $.parseJSON(message);
+            for (var i = 0; i < data.length; i++) {
+                const li = document.createElement("li");
+                li.textContent = data[i].UserName;
+                document.getElementById("userInfo").appendChild(li);
+            }
+        });
+
+
+        connection.on("alertMsg", (msg) => {
+            alert(msg);
+        });
+
+    </script>
 }
 
