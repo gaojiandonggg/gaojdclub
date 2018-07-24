@@ -25,6 +25,7 @@ namespace SignalRDemo.Controllers
 
         // [Route("notification")]
         public IActionResult Notify()
+
         {
             return View();
         }
