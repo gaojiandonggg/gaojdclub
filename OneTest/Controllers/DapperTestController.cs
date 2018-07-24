@@ -67,6 +67,42 @@ namespace GaoJD.Club.OneTest.Controllers
             return "";
         }
 
+        /// <summary>
+        /// 获取 Guid
+        /// </summary>
+        /// <returns></returns>
+
+        [HttpGet]
+        private Guid GetGuid()   //与Func<Guid> 兼容
+        {
+            return Guid.NewGuid();
+        }
+
+        /// <summary>
+        /// 异步获取 Guid
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task GetGuidAsync()
+        {
+            var myFunc = new Func<Guid>(GetGuid);
+            var t1 = await Task.Run(myFunc);
+
+            var t2 = await Task.Run(new Func<Guid>(GetGuid));
+
+            var t3 = await Task.Run(() => GetGuid());
+
+            var t4 = await Task.Run(() => Guid.NewGuid());
+
+            Console.WriteLine($"t1: {t1}");
+            Console.WriteLine($"t2: {t2}");
+            Console.WriteLine($"t3: {t3}");
+            Console.WriteLine($"t4: {t4}");
+
+
+        }
+
+
         [HttpGet]
         public string Test(Func<string, string> func)
         {

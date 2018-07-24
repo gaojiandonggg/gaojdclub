@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaoJD.Club.Repository", "Ga
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaoJD.Club.Utility", "GaoJD.Club.Utility\GaoJD.Club.Utility.csproj", "{751ADF2D-B2D3-48AA-8929-586AE4B1961B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRDemo", "SignalRDemo\SignalRDemo.csproj", "{98AA06C6-485B-4982-8918-D523C506F13B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{751ADF2D-B2D3-48AA-8929-586AE4B1961B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{751ADF2D-B2D3-48AA-8929-586AE4B1961B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{751ADF2D-B2D3-48AA-8929-586AE4B1961B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98AA06C6-485B-4982-8918-D523C506F13B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98AA06C6-485B-4982-8918-D523C506F13B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98AA06C6-485B-4982-8918-D523C506F13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98AA06C6-485B-4982-8918-D523C506F13B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{6BAEC433-FBF0-4951-999B-51DB439FBEFE} = {A6364D28-657D-4B8E-A74C-D09D50329EA1}
 		{FF1E82B5-45BA-4341-8C2E-FA40C4593B27} = {A6364D28-657D-4B8E-A74C-D09D50329EA1}
 		{751ADF2D-B2D3-48AA-8929-586AE4B1961B} = {A6364D28-657D-4B8E-A74C-D09D50329EA1}
+		{98AA06C6-485B-4982-8918-D523C506F13B} = {27B402A9-D79A-44D6-A36F-C648043B5573}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36B25B07-2275-4484-8B4E-6B73B1C6B952}
