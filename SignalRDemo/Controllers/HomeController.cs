@@ -21,6 +21,7 @@ namespace SignalRDemo.Controllers
 
             return View();
 
+
         }
 
         public IActionResult Contact()
