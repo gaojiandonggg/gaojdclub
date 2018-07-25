@@ -58,6 +58,15 @@
         </div>
 
     </div>
+
+
+</div>
+
+
+<div style=" padding-top:10px;clear:both; ">
+
+    消息  ：  <input type="text" id="messageAllInput" /><br />
+    <input type="button" id="sendAllButton" value="群发" />
 </div>
 <div style="clear:both;"></div>
 
@@ -76,7 +85,9 @@
         }
 
         var connection = new signalR.HubConnectionBuilder()
-            .withUrl("/ChatHub")
+            .withUrl("http://localhost:5000/chatHub", {
+                accessTokenFactory: () => "gaojiandong"
+            })
             .build();
 
         connection.on("Notify", function (message) {
@@ -160,7 +171,6 @@
             event.preventDefault();
         });
 
-
         connection.on("ReceiveClientMessage", (connectionId, message) => {
             const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
             const encodedMsg = connectionId + "  say  " + msg;
@@ -169,6 +179,16 @@
             li.value = connectionId;
             document.getElementById("groupClientList").appendChild(li);
         });
+
+        //发送connectionId消息
+        document.getElementById("sendAllButton").addEventListener("click", event => {
+            const messageInput = document.getElementById("messageAllInput").value;
+            connection.invoke("SendMessage", messageInput).catch(err => console.error(err.toString()));
+            event.preventDefault();
+        });
+
+
+
     </script>
 }
 

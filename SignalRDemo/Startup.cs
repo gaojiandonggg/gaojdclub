@@ -38,8 +38,8 @@ namespace SignalRDemo
 
             services.AddMvc();
 
-            services.AddSignalR();
-            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+            //  services.AddSignalR();
+            // services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             services.AddHttpContextAccessor();
             services.AddScoped(typeof(ILogicBase<>), typeof(LogicBase<>));
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
@@ -111,10 +111,10 @@ namespace SignalRDemo
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ChatHub>("/chatHub");
-            });
+            //app.UseSignalR(routes =>
+            //{
+            //    routes.MapHub<ChatHub>("/chatHub");
+            //});
         }
 
         /// <summary>

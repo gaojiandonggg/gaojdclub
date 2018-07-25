@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using GaoJD.Club.Core;
 using GaoJD.Club.Logger;
 using GaoJD.Club.OneTest;
+using GaoJD.Club.OneTest.Extensions;
 using GaoJD.Club.OneTest.Filter;
 using GaoJD.Club.Redis;
 using GaoJD.Club.Repository;
@@ -67,8 +68,9 @@ namespace OneTest
             // }
 
             services.AddLogger();
-
+            services.AddCors();
             services.AddSession();
+            services.AddSignalR();
 
             // services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
             //   .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
@@ -145,9 +147,11 @@ namespace OneTest
 
             app.UseCors(builder =>
             {
+                //builder.WithOrigins("http://localhost:55811").AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 builder.AllowAnyOrigin();
                 builder.AllowAnyHeader();
                 builder.AllowAnyMethod();
+                builder.AllowCredentials();
             });
             app.UseStaticHttpContext();
             OpenConfiguration.Configure(Configuration);
@@ -170,6 +174,14 @@ namespace OneTest
 
             app.UseMvc();
 
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHubNew>("/ChatHubNew");
+            });
         }
 
         /// <summary>

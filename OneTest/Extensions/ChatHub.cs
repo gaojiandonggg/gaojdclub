@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GaoJD.Club.OneTest.Model;
+using Newtonsoft.Json;
+using GaoJD.Club.Utility;
+using Microsoft.AspNetCore.Mvc;
+using GaoJD.Club.OneTest.Filter;
 
-namespace SignalRDemo.Common
+namespace GaoJD.Club.OneTest.Extensions
 {
     public class ChatHub : Hub
     {
-
         public static UserContext db = new UserContext();
 
 
@@ -68,7 +71,7 @@ namespace SignalRDemo.Common
 
         public override async Task OnConnectedAsync()
         {
-
+            var aa = HttpContext.Current.Request.Cookies;
             // 查询用户。
             var user = db.Users.SingleOrDefault(u => u.UserName == Context.ConnectionId);
 

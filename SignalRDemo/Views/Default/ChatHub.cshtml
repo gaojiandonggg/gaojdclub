@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Notify";
+}
+
+
+<div style="margin-top:30px; ">
+
+
+    <div style="width:100%; float:left; height:600px; border:2px solid black; padding:5px 5px; margin-left:1px;">
+        <div style="width:60%; float:left; height:590px; border-right:1px solid black;">
+
+            <div>
+                <p>聊天信息：</p>
+                <ul id="RoomInfo"></ul>
+            </div>
+            <div>
+                <input type="text" id="message" /> <input type="button" id="sendGroupButton" value="发送" />
+            </div>
+        </div>
+        <div style=" width:30%; float:left; height:600px;">
+            <div style="margin-left:20px;">
+                <p>用户列表：</p>
+                <ul id="userInfo"></ul>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<div style=" padding-top:10px;clear:both; ">
+
+    消息  ：  <input type="text" id="messageAllInput" /><br />
+    <input type="button" id="sendAllButton" value="群发" />
+</div>
+<div style="clear:both;"></div>
+
+
+<ul id="messages-list"></ul>
+@section Scripts {
+    <script src="/signalr/signalr.js"></script>
+    <script type="text/javascript">
+
+
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("http://localhost:5000/ChatHubNew", {
+            accessTokenFactory: () => @ViewBag.id
+        })
+        .build();
+
+    connection.on("Notify", function (message) {
+        appendMessage(message)
+    });
+
+    connection.start();
+
+
+
+
+    connection.on("ReceiveGroupMessage", (UserName, message) => {
+        const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const encodedMsg = UserName + " says " + msg;
+        const li = document.createElement("li");
+        li.textContent = encodedMsg;
+        document.getElementById("RoomInfo").appendChild(li);
+    });
+
+
+    connection.on("GetALLUserInfo", (message) => {
+        $("#userInfo").html("");
+        var data = $.parseJSON(message);
+        for (var i = 0; i < data.length; i++) {
+            const li = document.createElement("li");
+            if (data[i].IsOnLine == true) {
+                li.textContent = data[i].UserName + "|在线";
+            } else {
+                li.textContent = data[i].UserName;
+            }
+            document.getElementById("userInfo").appendChild(li);
+        }
+    });
+
+
+    connection.on("alertMsg", (msg) => {
+        alert(msg);
+    });
+
+    connection.on("getConnectionId", (msg) => {
+        $("#connectionid").text(msg)
+    });
+
+
+
+            ////发送connectionId消息
+            //document.getElementById("sendButton").addEventListener("click", event => {
+            //    const connectionId = document.getElementById("connectionId").value;
+            //    const messageInput = document.getElementById("messageInput").value;
+            //    connection.invoke("SendClientMessage", connectionId, messageInput).catch(err => console.error(err.toString()));
+            //    event.preventDefault();
+            //});
+
+            //connection.on("ReceiveClientMessage", (connectionId, message) => {
+            //    const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            //    const encodedMsg = connectionId + "  say  " + msg;
+            //    const li = document.createElement("li");
+            //    li.textContent = encodedMsg;
+            //    li.value = connectionId;
+            //    document.getElementById("groupClientList").appendChild(li);
+            //});
+
+            ////发送connectionId消息
+            //document.getElementById("sendAllButton").addEventListener("click", event => {
+            //    const messageInput = document.getElementById("messageAllInput").value;
+            //    connection.invoke("SendMessage", messageInput).catch(err => console.error(err.toString()));
+            //    event.preventDefault();
+            //});
+
+
+
+    </script>
+}
+

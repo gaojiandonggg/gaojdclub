@@ -10,16 +10,16 @@ namespace SignalRDemo.Controllers
 {
     public class DefaultController : Controller
     {
-        private readonly IHubContext<ChatHub> _hubContext;
-        public DefaultController(IHubContext<ChatHub> hubContext)
-        {
-            _hubContext = hubContext;
-        }
+        //private readonly IHubContext<ChatHub> _hubContext;
+        //public DefaultController(IHubContext<ChatHub> hubContext)
+        //{
+        //    _hubContext = hubContext;
+        //}
 
 
         public async Task<IActionResult> Index()
         {
-            await _hubContext.Clients.All.SendAsync("Notify", $"Home page loaded at: {DateTime.Now}");
+            // await _hubContext.Clients.All.SendAsync("Notify", $"Home page loaded at: {DateTime.Now}");
             return View();
         }
 
@@ -29,6 +29,12 @@ namespace SignalRDemo.Controllers
         {
             return View();
         }
+        // [Route("notification")]
+        public IActionResult ChatHub(int id)
 
+        {
+            ViewBag.id = id;
+            return View();
+        }
     }
 }
