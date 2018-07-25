@@ -115,8 +115,6 @@
     });
 
 
-
-
     //发送connectionId消息
     document.getElementById("sendButton").addEventListener("click", event => {
         const connectionId = document.getElementById("connectionId").value;
@@ -124,8 +122,6 @@
         connection.invoke("SendClientMessage", connectionId, messageInput).catch(err => console.error(err.toString()));
         event.preventDefault();
     });
-
-
 
 
     connection.on("ReceiveClientMessage", (connectionId, message) => {
