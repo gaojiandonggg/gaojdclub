@@ -773,6 +773,7 @@ namespace GaoJD.Club.Redis
         /// <returns></returns>
         public List<T> HashGetAll<T>(string key)
         {
+            var aaa = GetDatabase().HashGetAll(MergeKey(key));
             var values = GetDatabase().HashGetAll(MergeKey(key)).Select(x => x.Value);
             return values.Select(i => RedisUtility.ConvertToEntity<T>(i)).ToList();
         }
