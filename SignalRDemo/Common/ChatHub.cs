@@ -89,26 +89,35 @@ namespace SignalRDemo.Common
                        select new { a.RoomName };
             await Clients.Client(this.Context.ConnectionId).SendAsync("getRoomlist", JsonConvert.SerializeObject(itme.ToList()));
 
+
+            await Clients.Client(this.Context.ConnectionId).SendAsync("getConnectionId", Context.ConnectionId);
+
+
             await base.OnConnectedAsync();
         }
 
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var user = db.Users.Where(u => u.UserName == Context.ConnectionId).FirstOrDefault();
 
-            //判断用户是否存在,存在则删除
-            if (user != null)
+            await Task.Run(() =>
             {
-                //删除用户
-                db.Users.Remove(user);
-                // 循环用户的房间,删除用户
-                foreach (var item in user.Rooms)
+                var user = db.Users.Where(u => u.UserName == Context.ConnectionId).FirstOrDefault();
+
+                //判断用户是否存在,存在则删除
+                if (user != null)
                 {
-                    RemoveFromRoom(item.RoomName);
+                    //删除用户
+                    db.Users.Remove(user);
+                    // 循环用户的房间,删除用户
+                    foreach (var item in user.Rooms)
+                    {
+                        RemoveFromRoom(item.RoomName);
+                    }
                 }
-            }
-            GetRoomList();
+                GetRoomList();
+            });
+
             await base.OnDisconnectedAsync(exception);
         }
 
@@ -133,6 +142,9 @@ namespace SignalRDemo.Common
                 {
                     db.Rooms.Remove(room);
                 }
+
+
+
                 Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
                 GetUsersList(roomName);
                 //提示客户端
@@ -170,12 +182,10 @@ namespace SignalRDemo.Common
         /// </summary>
         private void GetRoomList()
         {
-
             var itme = from a in db.Rooms
                        select new { a.RoomName };
             string jsondata = JsonConvert.SerializeObject(itme.ToList());
             Clients.All.SendAsync("getRoomlist", jsondata);
-
         }
 
 
@@ -185,12 +195,18 @@ namespace SignalRDemo.Common
         private void GetUsersList(string Room)
         {
             var room = db.Rooms.Where(p => p.RoomName == Room).SingleOrDefault();
-            var users = room?.Users;
-            var item = from a in users
-                       select new { a.UserName };
-            string jsondata = JsonConvert.SerializeObject(item.ToList());
-            Clients.Group(Room).SendAsync("getUserlist", jsondata);
-
+            if (room != null)
+            {
+                var users = room?.Users;
+                var item = from a in users
+                           select new { a.UserName };
+                string jsondata = JsonConvert.SerializeObject(item.ToList());
+                Clients.Group(Room).SendAsync("getUserlist", jsondata);
+            }
+            else
+            {
+                Clients.Group(Room).SendAsync("getUserlist", null);
+            }
         }
 
 
