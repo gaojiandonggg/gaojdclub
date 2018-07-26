@@ -22,32 +22,30 @@ namespace GaoJD.Club.OneTest.Extensions
             this._userLogic = userLogic;
         }
 
+        public class UserInfo
+        {
+            public string UserName { get; set; }
+            public string groupName { get; set; }
+        }
 
         public override async Task OnConnectedAsync()
         {
             string token = HttpContext.Current.Request.Query["access_token"];
+            UserInfo info = JsonConvert.DeserializeObject<UserInfo>(token);
             //groupName 可以从连接请求链接中获取
-            string groupName = "222";
+            string groupName = info.groupName;
             //当前登陆人
-            string UserName = token;
+            string UserName = info.UserName;
             //redis中保存对应组在线列表
             _redisClient.SetHash(groupName, Context.ConnectionId, UserName);
-
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             //告诉页面ConnectionId值
             await Clients.Client(this.Context.ConnectionId).SendAsync("getConnectionId", Context.ConnectionId);
             //这里有必要更新组内在线人状态，从redis中获取在线人
             List<string> list = _redisClient.HashGetAll<string>(groupName);
-
             List<User> listuser = _userLogic.GetAll();
-
-
             var item = from c in listuser select new { c.UserName, IsOnLine = list.Contains(c.ID.ToString()) };
-
-
-
             await Clients.Group(groupName).SendAsync("GetALLUserInfo", JsonConvert.SerializeObject(item));
-
             await base.OnConnectedAsync();
         }
 
@@ -56,29 +54,31 @@ namespace GaoJD.Club.OneTest.Extensions
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             string token = HttpContext.Current.Request.Query["access_token"];
+            UserInfo info = JsonConvert.DeserializeObject<UserInfo>(token);
             //groupName 可以从连接请求链接中获取
-            string groupName = "222";
+            string groupName = info.groupName;
             //当前登陆人
-            string UserName = token;
-            //redis中保存对应组在线列表
+            string UserName = info.UserName;
             _redisClient.RemoveField(groupName, Context.ConnectionId);
-
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-
-
             //这里有必要更新组内在线人状态，从redis中获取在线人
             List<string> list = _redisClient.HashGetAll<string>(groupName);
-
-            // List<User> listuser = _userLogic.GetAll();
-
-            // var item = from c in list select new { c.UserName };
-
-            await Clients.Group(groupName).SendAsync("leftUser", UserName);
-
+            List<User> listuser = _userLogic.GetAll();
+            var item = from c in listuser select new { c.UserName, IsOnLine = list.Contains(c.ID.ToString()) };
+            await Clients.Group(groupName).SendAsync("GetALLUserInfo", JsonConvert.SerializeObject(item));
             await base.OnDisconnectedAsync(exception);
         }
 
-
+        /// <summary>
+        /// 发送消息到组,组下的当前连接的人都能收到
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public Task SendMessageToGroup(string groupName, string UserName, string message)
+        {
+            return Clients.Group(groupName).SendAsync("ReceiveGroupMessage", $"{ UserName}:{ Context.ConnectionId}", message);
+        }
 
     }
 }

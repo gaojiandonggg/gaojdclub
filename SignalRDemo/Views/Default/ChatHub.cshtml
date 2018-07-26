@@ -5,7 +5,6 @@
 
 <div style="margin-top:30px; ">
 
-
     <div style="width:100%; float:left; height:600px; border:2px solid black; padding:5px 5px; margin-left:1px;">
         <div style="width:60%; float:left; height:590px; border-right:1px solid black;">
 
@@ -25,9 +24,6 @@
 
         </div>
     </div>
-
-
-
 </div>
 
 
@@ -43,11 +39,13 @@
 @section Scripts {
     <script src="/signalr/signalr.js"></script>
     <script type="text/javascript">
-
-
+        var aa = {};
+        aa.UserName =@ViewBag.id;
+        aa.groupName =@ViewBag.groupName;
+       
     var connection = new signalR.HubConnectionBuilder()
         .withUrl("http://localhost:5000/ChatHubNew", {
-            accessTokenFactory: () => @ViewBag.id
+            accessTokenFactory: () => JSON.stringify(aa)
         })
         .build();
 
@@ -92,32 +90,22 @@
         $("#connectionid").text(msg)
     });
 
+        connection.on("ReceiveGroupMessage", (UserName, message) => {
+            const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const encodedMsg = UserName + " says " + msg;
+            const li = document.createElement("li");
+            li.textContent = encodedMsg;
+            document.getElementById("RoomInfo").appendChild(li);
+        });
 
-
-            ////发送connectionId消息
-            //document.getElementById("sendButton").addEventListener("click", event => {
-            //    const connectionId = document.getElementById("connectionId").value;
-            //    const messageInput = document.getElementById("messageInput").value;
-            //    connection.invoke("SendClientMessage", connectionId, messageInput).catch(err => console.error(err.toString()));
-            //    event.preventDefault();
-            //});
-
-            //connection.on("ReceiveClientMessage", (connectionId, message) => {
-            //    const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            //    const encodedMsg = connectionId + "  say  " + msg;
-            //    const li = document.createElement("li");
-            //    li.textContent = encodedMsg;
-            //    li.value = connectionId;
-            //    document.getElementById("groupClientList").appendChild(li);
-            //});
-
-            ////发送connectionId消息
-            //document.getElementById("sendAllButton").addEventListener("click", event => {
-            //    const messageInput = document.getElementById("messageAllInput").value;
-            //    connection.invoke("SendMessage", messageInput).catch(err => console.error(err.toString()));
-            //    event.preventDefault();
-            //});
-
+        //发送消息(组)
+        document.getElementById("sendGroupButton").addEventListener("click", event => {
+            const UserName = document.getElementById("UserName").value;
+            const groupName = document.getElementById("groupName").value;
+            const message = document.getElementById("message").value;
+            connection.invoke("SendMessageToGroup", groupName, UserName, message).catch(err => console.error(err.toString()));
+            event.preventDefault();
+        });
 
 
     </script>

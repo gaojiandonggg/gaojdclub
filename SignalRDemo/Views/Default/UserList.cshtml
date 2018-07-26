@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "UserList";
+}
+
+
+
+@model List<GaoJD.Club.BusinessEntity.User>
+
+
+<div>
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li id="@item.ID">@item.UserName<a target="_blank" href="/Default/ChatHub?id=@item.ID&groupName=@ViewBag.groupName">进入聊天室</a></li>
+        }
+    </ul>
+</div>
+<script>
+
+</script>
+
+
