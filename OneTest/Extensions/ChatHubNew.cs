@@ -75,9 +75,9 @@ namespace GaoJD.Club.OneTest.Extensions
         /// <param name="groupName"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public Task SendMessageToGroup(string groupName, string UserName, string message)
+        public Task SendMessageToGroup(string groupName, string message)
         {
-            return Clients.Group(groupName).SendAsync("ReceiveGroupMessage", $"{ UserName}:{ Context.ConnectionId}", message);
+            return Clients.Group(groupName).SendAsync("ReceiveGroupMessage", Context.ConnectionId, message);
         }
 
     }

@@ -2,6 +2,9 @@
     ViewData["Title"] = "Notify";
 }
 
+<div style=" height:30px; padding:10px 0px;">
+    <span id="connectionid"></span>
+</div>
 
 <div style="margin-top:30px; ">
 
@@ -42,7 +45,7 @@
         var aa = {};
         aa.UserName =@ViewBag.id;
         aa.groupName =@ViewBag.groupName;
-       
+
     var connection = new signalR.HubConnectionBuilder()
         .withUrl("http://localhost:5000/ChatHubNew", {
             accessTokenFactory: () => JSON.stringify(aa)
@@ -90,20 +93,12 @@
         $("#connectionid").text(msg)
     });
 
-        connection.on("ReceiveGroupMessage", (UserName, message) => {
-            const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            const encodedMsg = UserName + " says " + msg;
-            const li = document.createElement("li");
-            li.textContent = encodedMsg;
-            document.getElementById("RoomInfo").appendChild(li);
-        });
 
         //发送消息(组)
         document.getElementById("sendGroupButton").addEventListener("click", event => {
-            const UserName = document.getElementById("UserName").value;
-            const groupName = document.getElementById("groupName").value;
+            const groupName = "@ViewBag.groupName";
             const message = document.getElementById("message").value;
-            connection.invoke("SendMessageToGroup", groupName, UserName, message).catch(err => console.error(err.toString()));
+            connection.invoke("SendMessageToGroup", groupName, message).catch(err => console.error(err.toString()));
             event.preventDefault();
         });
 
