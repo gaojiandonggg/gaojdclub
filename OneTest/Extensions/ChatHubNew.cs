@@ -30,6 +30,7 @@ namespace GaoJD.Club.OneTest.Extensions
 
         public override async Task OnConnectedAsync()
         {
+
             string token = HttpContext.Current.Request.Query["access_token"];
             UserInfo info = JsonConvert.DeserializeObject<UserInfo>(token);
             //groupName 可以从连接请求链接中获取
@@ -46,6 +47,7 @@ namespace GaoJD.Club.OneTest.Extensions
             List<User> listuser = _userLogic.GetAll();
             var item = from c in listuser select new { c.UserName, IsOnLine = list.Contains(c.ID.ToString()) };
             await Clients.Group(groupName).SendAsync("GetALLUserInfo", JsonConvert.SerializeObject(item));
+
             await base.OnConnectedAsync();
         }
 
@@ -79,6 +81,13 @@ namespace GaoJD.Club.OneTest.Extensions
         {
             return Clients.Group(groupName).SendAsync("ReceiveGroupMessage", Context.ConnectionId, message);
         }
+
+        public Task SendMessageToUser(string message)
+        {
+            string userid = HttpContext.Current.Request.Cookies["woshiceshi"]?.ToString();
+            return Clients.User(userid).SendAsync("SendMessageToUser", message);
+        }
+
 
     }
 }

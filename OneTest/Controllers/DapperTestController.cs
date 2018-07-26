@@ -21,7 +21,17 @@ namespace GaoJD.Club.OneTest.Controllers
         {
             return new string[] { "value1", "value2" };
         }
+        [HttpGet]
+        public void SetCookid()
+        {
+            GaoJD.Club.Utility.HttpContext.Current.Response.Cookies.Append("woshiceshi", "2117");
+        }
 
+        [HttpGet]
+        public void GetCookid()
+        {
+            string aaa = Utility.HttpContext.Current.Request.Cookies["woshiceshi"]?.ToString();
+        }
 
         [HttpPost]
         public string Add()
