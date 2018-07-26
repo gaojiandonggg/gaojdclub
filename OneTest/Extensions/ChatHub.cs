@@ -11,6 +11,7 @@ using GaoJD.Club.OneTest.Filter;
 
 namespace GaoJD.Club.OneTest.Extensions
 {
+    [TypeFilter(typeof(ApiAuthenticationFilter))]
     public class ChatHub : Hub
     {
         public static UserContext db = new UserContext();
