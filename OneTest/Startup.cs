@@ -14,6 +14,7 @@ using log4net.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OneTest.Extensions;
@@ -54,23 +55,20 @@ namespace OneTest
             // {
             //     services.AddDbContext<ReadSqlServerContext>(opt =>
             //   opt.UseSqlServer(Configuration.GetConnectionString("ReadSqlServerConnection")));
-
             //     services.AddDbContext<WriteSqlServerContext>(opt =>
             // opt.UseSqlServer(Configuration.GetConnectionString("WriteSqlServerConnection")));
-
-
             // }
             // else if (_DataBaseProvider._isMySql)
             // {
             //     services.AddDbContext<TeacherClubContext>(options =>
             //options.UseMySql(Configuration.GetConnectionString("MySqlConnection")));
-
             // }
 
             services.AddLogger();
             services.AddCors();
             services.AddSession();
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
             // services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
             //   .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");

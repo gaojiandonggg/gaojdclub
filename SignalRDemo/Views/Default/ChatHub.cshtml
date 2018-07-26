@@ -102,6 +102,23 @@
             event.preventDefault();
         });
 
+               //发送消息(组)
+        document.getElementById("sendAllButton").addEventListener("click", event => {
+
+            const message = document.getElementById("messageAllInput").value;
+            connection.invoke("SendMessageToUser",  message).catch(err => console.error(err.toString()));
+            event.preventDefault();
+        });
+
+    connection.on("SendMessageToUser", (message) => {
+        const msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const encodedMsg = UserName + " says " + msg;
+        const li = document.createElement("li");
+        li.textContent = encodedMsg;
+        document.getElementById("RoomInfo").appendChild(li);
+    });
+
+
 
     </script>
 }
