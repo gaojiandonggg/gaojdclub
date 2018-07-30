@@ -492,6 +492,15 @@ namespace GaoJD.Club.Redis
         List<T> HashGetAll<T>(string key);
 
         /// <summary>
+        /// 获取hashtable中所有key的value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        List<T> HashGetAllKey<T>(string key);
+
+
+        /// <summary>
         /// 存储hashtable
         /// </summary>
         /// <param name="RedisHashKey"></param>

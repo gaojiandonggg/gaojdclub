@@ -11,8 +11,10 @@ using GaoJD.Club.Utility;
 using log4net;
 using log4net.Config;
 using log4net.Repository;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
@@ -74,10 +76,8 @@ namespace OneTest
             //   .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_0);
-
             services.AddSwaggerGen(c =>
             {
-
                 c.SwaggerDoc("v2", new Info
                 {
                     Version = "v2",
@@ -92,33 +92,32 @@ namespace OneTest
             });
             services.AddHttpContextAccessor();
 
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(o => o.LoginPath = new PathString("/login"));
+
+
+
+
             services.AddScoped(typeof(ILogicBase<>), typeof(LogicBase<>));
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             var builder = new ContainerBuilder();//实例化 AutoFac  容器   
             builder.Populate(services);
             builder.RegisterType<AppConfigurtaionServices>().SingleInstance();
-
             //注入Redis
             builder.RegisterType<RedisClient>().As<IRedisClient>().SingleInstance();
-
             builder.RegisterType(typeof(OpenConfiguration));
-
             Assembly[] asmLopgic = GetAllAssembly("*.Logic.dll").ToArray();
             builder.RegisterAssemblyTypes(asmLopgic)
                .Where(t => t.Name.EndsWith("Logic"))
                .AsImplementedInterfaces().AsSelf();
 
-
             //注册仓储
-            //Assembly[] asmRepository = GetAllAssembly("*.Repository.dll").ToArray();
-            //builder.RegisterAssemblyTypes(asmRepository)
-            //   .Where(t => t.Name.EndsWith("Repository"))
-            //   .AsImplementedInterfaces().AsSelf();
-
-            builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerDependency();
-
+            Assembly[] asmRepository = GetAllAssembly("*.Repository.dll").ToArray();
+            builder.RegisterAssemblyTypes(asmRepository)
+               .Where(t => t.Name.EndsWith("Repository"))
+               .AsImplementedInterfaces().AsSelf();
             //  builder.RegisterGeneric(typeof(LogicBase<>)).As(typeof(ILogicBase<>)).InstancePerDependency();
-
             //  builder.RegisterGeneric(typeof(RepositoryBase<>)).As(typeof(IRepositoryBase<>)).InstancePerDependency();
             builder.RegisterType<ApiAuthenticationFilter>().SingleInstance();
 
@@ -168,6 +167,9 @@ namespace OneTest
                 c.SwaggerEndpoint("/swagger/v2/swagger.json", "OneTest API V1");
                 c.ShowRequestHeaders();
             });
+
+
+            app.UseAuthentication();
 
 
             app.UseMvc();

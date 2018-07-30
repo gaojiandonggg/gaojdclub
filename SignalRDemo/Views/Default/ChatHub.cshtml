@@ -80,7 +80,10 @@
             } else {
                 li.textContent = data[i].UserName;
             }
+            var html = '<a target="_blank" href="/Default/singleChatHub?CurrentUserID=' + @ViewBag.id + '&UserID=' + data[i].ID + '">聊天</a>';
             document.getElementById("userInfo").appendChild(li);
+            $("#userInfo").append(html);
+           // document.getElementById("userInfo").appendMessage(html);
         }
     });
 

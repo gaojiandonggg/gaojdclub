@@ -58,7 +58,7 @@ namespace GaoJD.Club.OneTest.Filter
                         _redisClient.Set(token, token, TimeSpan.FromMinutes(30));//token   redis续期
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     var result = new JsonResult(new { Success = false, Code = "401", Msg = "认证失败" });
                     context.Result = result;

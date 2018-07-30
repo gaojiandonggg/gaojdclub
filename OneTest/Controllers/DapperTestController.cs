@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Dapper;
 using GaoJD.Club.BusinessEntity;
 using GaoJD.Club.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GaoJD.Club.OneTest.Controllers
@@ -24,12 +27,26 @@ namespace GaoJD.Club.OneTest.Controllers
         [HttpGet]
         public void SetCookid()
         {
-            GaoJD.Club.Utility.HttpContext.Current.Response.Cookies.Append("woshiceshi", "2117");
+            //var identity = new ClaimsIdentity(this.User.Identity);
+            //identity.AddClaim(new Claim("id", "2117"));  // 用户Id
+            //identity.AddClaim(new Claim("name", "aaa"));       // 用户名称
+            //var principal = new ClaimsPrincipal(identity);
+            var claims = new List<Claim>(){
+                              new Claim(ClaimTypes.Name, "aaa"),new Claim("password","2117"),new Claim("realname","张龙豪")
+                           };
+            //init the identity instances 
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "Customer"));
+            //signin 
+            HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = true, ExpiresUtc = DateTime.UtcNow.AddMinutes(20) }); //过期时间20分钟
+            // GaoJD.Club.Utility.HttpContext.Current.Response.Cookies.Append("woshiceshi", "2117");
         }
 
         [HttpGet]
         public void GetCookid()
         {
+
+            string aa = HttpContext.User?.Identity.Name;
+
             string aaa = Utility.HttpContext.Current.Request.Cookies["woshiceshi"]?.ToString();
         }
 
