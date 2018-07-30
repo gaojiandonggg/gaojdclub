@@ -47,7 +47,7 @@
         aa.groupName =@ViewBag.groupName;
 
     var connection = new signalR.HubConnectionBuilder()
-        .withUrl("http://localhost:5000/ChatHubNew", {
+        .withUrl("http://localhost:9997/ChatHubNew", {
             accessTokenFactory: () => JSON.stringify(aa)
         })
         .build();
