@@ -13,9 +13,7 @@ namespace GaoJD.Club.OneTest.Extensions
     {
         public virtual string GetUserId(HubConnectionContext connection)
         {
-            return HttpContext.Current.Request.Cookies["woshiceshi"]?.ToString();
-            // return connection.GetHttpContext().Request.Cookies["woshiceshi"]?.ToString();
-            // return connection.User?.FindFirst(ClaimTypes.Email)?.Value;
+            return connection.User?.FindFirst(ClaimTypes.Name)?.Value;
         }
     }
 }

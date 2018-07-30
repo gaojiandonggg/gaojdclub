@@ -47,5 +47,12 @@ namespace SignalRDemo.Controllers
             ViewBag.groupName = groupName;
             return View(list);
         }
+
+        public IActionResult singleChatHub(string CurrentUserID, string UserID)
+        {
+            ViewBag.CurrentUserID = CurrentUserID;
+            ViewBag.UserID = UserID;
+            return View();
+        }
     }
 }

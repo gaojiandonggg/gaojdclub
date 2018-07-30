@@ -779,6 +779,20 @@ namespace GaoJD.Club.Redis
         }
 
         /// <summary>
+        /// 获取hashtable中所有key的value
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public List<T> HashGetAllKey<T>(string key)
+        {
+            var aaa = GetDatabase().HashGetAll(MergeKey(key));
+            var values = GetDatabase().HashGetAll(MergeKey(key)).Select(x => x.Name);
+            return values.Select(i => RedisUtility.ConvertToEntity<T>(i)).ToList();
+        }
+
+
+        /// <summary>
         /// 获取所有hashtable中的值(异步)
         /// </summary>
         /// <typeparam name="T"></typeparam>
