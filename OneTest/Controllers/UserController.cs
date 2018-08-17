@@ -18,6 +18,7 @@ using GaoJD.Club.Dto;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
+using GaoJD.Club.Utility.Common;
 
 namespace GaoJD.Club.OneTest.Controllers
 {
@@ -51,8 +52,14 @@ namespace GaoJD.Club.OneTest.Controllers
         [HttpPost]
         public ActionResult<User> InsetUser([FromBody]User usr)
         {
+          //  throw new Exception("你好");
+            //throw new ApplicationException("你好");
+            throw new OperationFailedException("你好");
+
+
             try
             {
+
                 //_accessor.HttpContext.Session.SetString("aaa", "bbb");
                 //HttpContext.Session.SetString("aaa", "bbb");
                 _UserLogic.Insert(usr);
