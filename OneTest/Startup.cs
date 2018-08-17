@@ -75,7 +75,15 @@ namespace OneTest
             // services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
             //   .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_0);
+            
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(LogFilter));
+                options.Filters.Add(typeof(ModelValidateFilter));
+
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_0);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v2", new Info
@@ -153,6 +161,7 @@ namespace OneTest
             app.UseStaticHttpContext();
             OpenConfiguration.Configure(Configuration);
 
+            
 
             app.UseSession();
 
@@ -169,7 +178,7 @@ namespace OneTest
             });
 
 
-            app.UseAuthentication();
+            //  app.UseAuthentication();
 
 
             app.UseMvc();

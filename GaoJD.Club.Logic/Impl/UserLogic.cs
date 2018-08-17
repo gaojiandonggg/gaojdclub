@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GaoJD.Club.BusinessEntity;
 using GaoJD.Club.Core;
+using GaoJD.Club.Dto;
 using GaoJD.Club.Repository;
 
 namespace GaoJD.Club.Logic
@@ -19,6 +20,11 @@ namespace GaoJD.Club.Logic
         {
 
             return _userRepository.GetUser(userName, userPwd);
+        }
+
+        public string PostInput(User_Input user_Input)
+        {
+            return "";
         }
     }
 }
