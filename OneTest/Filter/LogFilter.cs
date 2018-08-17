@@ -40,6 +40,8 @@ namespace GaoJD.Club.OneTest.Filter
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var bbb = context.Result;
+
+
             if (bbb != null && bbb.GetType() == typeof(ObjectResult))
             {
                 logger.Operate("OutPut", JsonConvert.SerializeObject(((ObjectResult)bbb).Value));

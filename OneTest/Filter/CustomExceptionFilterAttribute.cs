@@ -24,6 +24,9 @@ namespace GaoJD.Club.OneTest.Filter
         public override void OnException(ExceptionContext context)
         {
             Exception exception = context.Exception;
+
+            string t = context.Exception.GetType().FullName;
+
             JsonResult result = null;
 
             result = new JsonResult("服务器处理出错")
