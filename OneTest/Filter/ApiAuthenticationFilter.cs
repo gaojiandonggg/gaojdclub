@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
@@ -25,7 +26,13 @@ namespace GaoJD.Club.OneTest.Filter
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            //var bbb = (context.ActionDescriptor as ControllerActionDescriptor).MethodInfo.GetCustomAttributes(true);
 
+            //var aaa = (context.ActionDescriptor as ControllerActionDescriptor).MethodInfo.GetCustomAttributes(typeof(AllowAnonymousFilter), true);
+
+            //var ccc = (context.ActionDescriptor as ControllerActionDescriptor).ControllerTypeInfo.CustomAttributes.Where(p => p.AttributeType == typeof(AllowAnonymousAttribute));
+
+            //var ddd = (context.ActionDescriptor as ControllerActionDescriptor).MethodInfo.DeclaringType.GetCustomAttributes(typeof(AllowAnonymousFilter), true);
             var isAnonymous = context.Filters.Where(c => c.GetType() == typeof(AllowAnonymousFilter));
             if (isAnonymous.Count() > 0)
             {

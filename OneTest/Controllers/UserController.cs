@@ -14,11 +14,16 @@ using GaoJD.Club.Logger;
 using GaoJD.Club.Redis;
 using System.Data.SqlClient;
 using System.Data;
+using GaoJD.Club.Dto;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GaoJD.Club.OneTest.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [AllowAnonymous]
     public class UserController : BaseApiController
     {
 
@@ -209,5 +214,22 @@ namespace GaoJD.Club.OneTest.Controllers
         }
 
 
+        [HttpPost]
+        public string PostInput([FromBody]User_Input user_Input)
+        {
+            Type t1 = user_Input.GetType();
+            PropertyInfo propertyInfo = t1.GetProperty("Email");
+            propertyInfo.SetValue(user_Input, "1111");
+
+            return "我是测试";
+        }
+
+
+
+        [HttpGet]
+        public string GetInput([Required(ErrorMessage = "我是测试")]string Name)
+        {
+            return "我是测试";
+        }
     }
 }

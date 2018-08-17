@@ -16,7 +16,7 @@ using GaoJD.Club.OneTest.Filter;
 
 namespace OneTest.Controllers
 {
-    [TypeFilter(typeof(ApiAuthenticationFilter))]
+    //[TypeFilter(typeof(ApiAuthenticationFilter))]
     public class BaseApiController : ControllerBase
     {
 

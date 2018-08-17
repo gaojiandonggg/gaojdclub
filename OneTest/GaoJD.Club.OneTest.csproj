@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GaoJD.Club.BusinessEntity\GaoJD.Club.BusinessEntity.csproj" />
     <ProjectReference Include="..\GaoJD.Club.Core\GaoJD.Club.Core.csproj" />
+    <ProjectReference Include="..\GaoJD.Club.Dto\GaoJD.Club.Dto.csproj" />
     <ProjectReference Include="..\GaoJD.Club.Logger\GaoJD.Club.Logger.csproj" />
     <ProjectReference Include="..\GaoJD.Club.Logic\GaoJD.Club.Logic.csproj" />
     <ProjectReference Include="..\GaoJD.Club.Redis\GaoJD.Club.Redis.csproj" />
