@@ -1,10 +1,15 @@
-﻿using Autofac;
+﻿using AspectCore.Configuration;
+using AspectCore.Extensions.Autofac;
+using AspectCore.Extensions.DependencyInjection;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GaoJD.Club.Core;
 using GaoJD.Club.Logger;
 using GaoJD.Club.OneTest;
 using GaoJD.Club.OneTest.Extensions;
 using GaoJD.Club.OneTest.Filter;
+using GaoJD.Club.OneTest.Middleware;
+using GaoJD.Club.OneTest.Model;
 using GaoJD.Club.Redis;
 using GaoJD.Club.Repository;
 using GaoJD.Club.Utility;
@@ -16,6 +21,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +30,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 
@@ -74,9 +81,10 @@ namespace OneTest
 
             // services.AddMvc(options => options.Filters.Add(typeof(CustomExceptionFilterAttribute)))
             //   .AddJsonOptions(options => options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss");
-
-
-
+            services.AddTransient<SampleInterface, SampleClass>();
+            services.AddServiceEventBusExpression();
+            services.AddSingleton<IEventHandler<MyTestEventData>, MyTestEventHandler>();
+            services.AddSingleton<IEventHandler<MyTestEventData>, MyTestTwoEventHandler>();
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(LogFilter));
@@ -84,6 +92,8 @@ namespace OneTest
                 options.Filters.Add(typeof(CustomExceptionFilterAttribute));
 
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_0);
+
+
 
             services.AddSwaggerGen(c =>
             {
@@ -101,18 +111,42 @@ namespace OneTest
             });
             services.AddHttpContextAccessor();
 
+            services.AddHttpClient();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(o => o.LoginPath = new PathString("/login"));
 
-   
 
+            services.AddResponseCompression();
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Fastest;
+            });
+
+
+            // services.AddTransient<SampleInterface, SampleClass>();
+            // services.AddDynamicProxy();
 
             services.AddScoped(typeof(ILogicBase<>), typeof(LogicBase<>));
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
             var builder = new ContainerBuilder();//实例化 AutoFac  容器   
             builder.Populate(services);
             builder.RegisterType<AppConfigurtaionServices>().SingleInstance();
+
+
+
+            //  builder.RegisterType<SampleClass>().As<SampleInterface>();
+            //  builder.RegisterDynamicProxy();
+
+
+            //builder.RegisterDynamicProxy(config =>
+            //{
+            //    // config
+            //    //  config.Interceptors.AddTyped<CustomInterceptor>();
+            //    config.Interceptors.Add(new InterceptorFactory(Predicates.ForMethod("*Query")));
+            //});
+
             //注入Redis
             builder.RegisterType<RedisClient>().As<IRedisClient>().SingleInstance();
             builder.RegisterType(typeof(OpenConfiguration));
@@ -181,6 +215,11 @@ namespace OneTest
 
             //  app.UseAuthentication();
 
+
+            app.UseIocConfiguration();
+
+
+            app.UseResponseCompression();
 
             app.UseMvc();
 

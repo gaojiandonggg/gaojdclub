@@ -17,5 +17,10 @@ namespace WebApplication1.Models
         {
             throw new NotImplementedException();
         }
+
+        public string GetPerson1(string UserName1)
+        {
+            return "";
+        }
     }
 }

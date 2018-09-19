@@ -1,12 +1,14 @@
-﻿using System;
+﻿using GaoJD.Club.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace GaoJD.Club.OneTest
 {
-    public class SampleClass : SampleInterface
+    public class MyTestEventData : EventData
     {
-        public virtual void Foo() { }
+        public int Name { get; set; }
+
     }
 }
