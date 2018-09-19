@@ -19,6 +19,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using GaoJD.Club.Utility.Common;
+using Microsoft.Extensions.DependencyInjection;
+using GaoJD.Club.Core;
+using System.Net.Http;
 
 namespace GaoJD.Club.OneTest.Controllers
 {
@@ -33,26 +36,66 @@ namespace GaoJD.Club.OneTest.Controllers
         int ccc = 6;
         int ddd = 7;
         int eee = 8;
-
-
-
+        private readonly IHttpClientFactory _clientFactory;
         private readonly IUserLogic _UserLogic;
         AppConfigurtaionServices _AppConfigurtaionServices;
         private ILogger _Logger;
         private IHttpContextAccessor _accessor;
+        private readonly SampleInterface sampleInterface;
 
-        public UserController(IUserLogic UserLogic, AppConfigurtaionServices AppConfigurtaionServices, ILogger Logger, IHttpContextAccessor accessor, IRedisClient redisClient) : base(redisClient)
+        public UserController(IHttpClientFactory clientFactory, IUserLogic UserLogic, AppConfigurtaionServices AppConfigurtaionServices, ILogger Logger, IHttpContextAccessor accessor, IRedisClient redisClient, SampleInterface sampleInterface) : base(redisClient)
         {
+            this._clientFactory = clientFactory;
             _UserLogic = UserLogic;
             this._AppConfigurtaionServices = AppConfigurtaionServices;
             this._Logger = Logger;
             this._accessor = accessor;
+            this.sampleInterface = sampleInterface;
         }
+
+        [HttpGet]
+        public string TestReturnString()
+        {
+            return "xxxxxxxxxxxxxxxxx";
+        }
+
+        [HttpGet]
+        public async Task TestBaidu()
+        {
+
+
+            for (int i = 0; i < 14; i++)
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, "https://www.baidu.com");
+                var client = _clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+            }
+
+
+        }
+
+        [HttpGet]
+        public void TestAop()
+        {
+            sampleInterface.Foo();
+        }
+
+        [HttpGet]
+        public void EventBusTest()
+        {
+
+            EventBus.Default.Trigger(new MyTestEventData() { Name = 1 });
+            EventBus.Default.Trigger(typeof(MyTestEventHandler), new MyTestEventData() { Name = 1 });
+
+            EventBus.Default.Register<MyTestEventData>(p => { p.Name = 111; });
+            EventBus.Default.Trigger(new MyTestEventData() { Name = 1 });
+        }
+
 
         [HttpPost]
         public ActionResult<User> InsetUser([FromBody]User usr)
         {
-          //  throw new Exception("你好");
+            //  throw new Exception("你好");
             //throw new ApplicationException("你好");
             throw new OperationFailedException("你好");
 

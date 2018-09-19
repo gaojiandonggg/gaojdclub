@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
+using AspectCore.Injector;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GaoJD.Club.OneTest.Filter;
@@ -15,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using WebApplication1.Aop;
 using WebApplication1.Interface;
 using WebApplication1.Models;
 
@@ -37,6 +41,11 @@ namespace WebApplication1
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
 
+          
+            //services.AddDynamicProxy(config =>
+            //{
+            //    config.Interceptors.AddTyped<SampleInterceptor>();
+            //});
 
             //services.ConfigureAll<MyOptions>(myOptions =>
             //{
@@ -71,6 +80,9 @@ namespace WebApplication1
 
             services.Configure<MyOptions>("named_options_1", Configuration);
 
+            services.AddTransient<SampleInterface, SampleClass>();
+
+            // services.AddDynamicProxy();
 
             services.AddSingleton<ConnectionStringResolverBase, DefaultConnectionStringResolver>();
 
@@ -82,10 +94,7 @@ namespace WebApplication1
             {
                 myOptions.Option1 = "named_options_2_value1_from_action";
             });
-
-
             services.AddSingleton<ISession<User>, SecondUser>();
-
 
             services.AddMvc(option =>
             {
@@ -93,11 +102,13 @@ namespace WebApplication1
             });
 
 
-            var builder = new ContainerBuilder();//实例化 AutoFac  容器   
-            builder.Populate(services);
+            var container = services.ToServiceContainer();
+            return container.Build();
+            //var builder = new ContainerBuilder();//实例化 AutoFac  容器   
+            //builder.Populate(services);
 
-            ApplicationContainer = builder.Build();
-            return new AutofacServiceProvider(ApplicationContainer);//第三方IOC接管 core内置DI容器  
+            //ApplicationContainer = builder.Build();
+            //return new AutofacServiceProvider(ApplicationContainer);//第三方IOC接管 core内置DI容器  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

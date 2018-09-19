@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Polly;
 using WebApplication1.Interface;
 using WebApplication1.Models;
 
@@ -20,17 +21,19 @@ namespace WebApplication1.Controllers
         private readonly ILogger<DefaultController> logger;
         private readonly IFileProvider fileProvider;
         private readonly IPersonRepostitoy personRepostitoy;
+        private readonly SampleInterface sampleInterface;
         private readonly MyOptions _named_options_1;
         private readonly MyOptions _named_options_2;
         private Action<ILogger, Exception> _indexPageRequested;
         private Action<int, int> _Test;
         public IDirectoryContents DirectoryContents { get; private set; }
-        public DefaultController(IOptions<MyOptions> optionsAccessor, IOptionsSnapshot<MyOptions> namedOptionsAccessor, ILogger<DefaultController> logger, IFileProvider fileProvider, IPersonRepostitoy personRepostitoy)
+        public DefaultController(IOptions<MyOptions> optionsAccessor, IOptionsSnapshot<MyOptions> namedOptionsAccessor, ILogger<DefaultController> logger, IFileProvider fileProvider, IPersonRepostitoy personRepostitoy, SampleInterface sampleInterface)
         {
             this.optionsAccessor = optionsAccessor;
             this.logger = logger;
             this.fileProvider = fileProvider;
             this.personRepostitoy = personRepostitoy;
+            this.sampleInterface = sampleInterface;
             _named_options_1 = namedOptionsAccessor.Get("named_options_1");
             _named_options_2 = namedOptionsAccessor.Get("named_options_2");
 
@@ -80,6 +83,15 @@ namespace WebApplication1.Controllers
             _Test = AAA;
             AAA(1, 2);
             return View();
+        }
+
+
+        public void TestAop()
+        {
+
+            // Policy.Handle<Exception>().WaitAndRetryAsync(3, p => TimeSpan.FromSeconds(p));
+            //sampleInterface.Foo();
+            var bbb = personRepostitoy.GetPerson1("aa");
         }
 
         public void AAA(int x, int y)
