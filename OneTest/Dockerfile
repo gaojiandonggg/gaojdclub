@@ -55,6 +55,7 @@ RUN dotnet build "OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
 
 
 FROM microsoft/dotnet:2.1-sdk
+WORKDIR /src
 RUN dotnet publish "OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
 
 # 声明使用的基础镜像
