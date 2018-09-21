@@ -66,7 +66,7 @@ WORKDIR /onetest
 #COPY ./bin/Debug/netcoreapp2.1/publish/  /onetest/
 ENV ASPNETCORE_URLS=http://*:9998 ASPNETCORE_ENVIRONMENT=Production
 # 指定应用入口点
-ENTRYPOINT ["dotnet", "/onetest/GaoJD.Club.OneTest.dll"]
+ENTRYPOINT ["dotnet", "GaoJD.Club.OneTest.dll"]
 
 
 
