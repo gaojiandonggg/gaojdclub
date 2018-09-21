@@ -49,7 +49,7 @@ EXPOSE 9998/tcp
 
 
 FROM microsoft/dotnet:2.1-sdk
-COPY .. /src
+COPY . /src
 WORKDIR /src
 RUN dotnet build "/OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
 
