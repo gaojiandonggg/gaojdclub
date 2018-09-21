@@ -51,11 +51,11 @@ EXPOSE 9998/tcp
 FROM microsoft/dotnet:2.1-sdk
 COPY . /src
 WORKDIR /src
-RUN dotnet build "/OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
+RUN dotnet build "OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
 
 
 FROM microsoft/dotnet:2.1-sdk
-RUN dotnet publish "/OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
+RUN dotnet publish "OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
 
 # 声明使用的基础镜像
 FROM microsoft/dotnet:2.1-sdk
