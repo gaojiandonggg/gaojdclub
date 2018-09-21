@@ -53,13 +53,13 @@ EXPOSE 9998/tcp
 #RUN dotnet build "OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
 #
 
-FROM microsoft/dotnet:2.1-sdk
+FROM microsoft/dotnet:2.1-sdk as publish
 COPY . /src
 WORKDIR /src
 RUN dotnet publish "OneTest/GaoJD.Club.OneTest.csproj"  -c Release -o /onetest
 
 # 声明使用的基础镜像
-FROM microsoft/dotnet:2.1-sdk
+FROM microsoft/dotnet:2.1-sdk 
 # 设置工作目录
 WORKDIR /onetest
 # 将本地dotnet core 应用拷贝到 容器 /app/ 目录下
