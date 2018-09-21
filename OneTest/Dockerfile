@@ -63,7 +63,7 @@ FROM microsoft/dotnet:2.1-sdk
 # 设置工作目录
 WORKDIR /onetest
 # 将本地dotnet core 应用拷贝到 容器 /app/ 目录下
-#COPY ./bin/Debug/netcoreapp2.1/publish/  /onetest/
+COPY --from=publish /onetest .  
 ENV ASPNETCORE_URLS=http://*:9998 ASPNETCORE_ENVIRONMENT=Production
 # 指定应用入口点
 ENTRYPOINT ["dotnet", "GaoJD.Club.OneTest.dll"]
