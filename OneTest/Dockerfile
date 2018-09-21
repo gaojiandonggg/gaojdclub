@@ -42,8 +42,6 @@
 FROM microsoft/dotnet:2.1-sdk 
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-# 设置工作目录
-WORKDIR /onetest
 # 设置导出端口
 EXPOSE 9998/tcp
 
@@ -60,10 +58,10 @@ RUN dotnet publish "OneTest/GaoJD.Club.OneTest.csproj"  -c Release
 
 # 声明使用的基础镜像
 FROM microsoft/dotnet:2.1-sdk
-# 设置工作目录
-WORKDIR /onetest
 # 将本地dotnet core 应用拷贝到 容器 /app/ 目录下
 COPY OneTest/bin/Release/netcoreapp2.1/publish/  /onetest/
+# 设置工作目录
+WORKDIR /onetest
 ENV ASPNETCORE_URLS=http://*:9998 ASPNETCORE_ENVIRONMENT=Production
 # 指定应用入口点
 ENTRYPOINT ["dotnet", "/onetest/GaoJD.Club.OneTest.dll"]
