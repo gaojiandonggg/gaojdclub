@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GaoJD.Club.Logger;
 using Microsoft.AspNetCore.Mvc;
+using GaoJD.Club.Core.Logger;
 
 namespace GaoJD.Club.OneTest.Filter
 {
@@ -15,10 +16,12 @@ namespace GaoJD.Club.OneTest.Filter
     {
 
         private readonly ILogger _logger;
+        private readonly ILogger<CustomExceptionFilterAttribute> logger;
 
-        public CustomExceptionFilterAttribute(ILogger logger)
+        public CustomExceptionFilterAttribute(ILogger _logger, ILogger<CustomExceptionFilterAttribute> logger)
         {
-            _logger = logger;
+            this._logger = _logger;
+            this.logger = logger;
         }
 
         public override void OnException(ExceptionContext context)

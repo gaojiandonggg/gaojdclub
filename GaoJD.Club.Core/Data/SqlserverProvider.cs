@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using GaoJD.Club.Core.Utility;
 using GaoJD.Club.Utility;
 using System;
 using System.Collections.Generic;
@@ -136,7 +137,7 @@ namespace GaoJD.Club.Core
             }
             using (SqlConnection connection = new SqlConnection(m_connectionString))
             {
-                return connection.Query<T>(sql, paramsValue).SingleOrDefault();
+                return connection.Query<T>(sql, paramsValue).FirstOrDefault();
             }
         }
 
@@ -420,7 +421,7 @@ namespace GaoJD.Club.Core
         /// <param name="entities">数据列表</param>
         public void AddList<T>(List<T> entities) where T : class
         {
-            Utilities.CheckNotEmpty<List<T>>(entities, "entities");
+            Utils.CheckNotEmpty<List<T>>(entities, "entities");
             Type t = typeof(T);
             string tableName = "dbo.[" + t.Name + "]";
             this.AddList<T>(tableName, entities);
@@ -434,8 +435,8 @@ namespace GaoJD.Club.Core
         /// <returns></returns>
         public void AddList<T>(string tableName, List<T> entities) where T : class
         {
-            Utilities.CheckNotEmpty<string>(tableName, "tableName");
-            Utilities.CheckNotEmpty<List<T>>(entities, "entities");
+            Utils.CheckNotEmpty<string>(tableName, "tableName");
+            Utils.CheckNotEmpty<List<T>>(entities, "entities");
             DataTable dt = ConvertHelper.ConvertListToDT<T>(entities);
             this.AddList(tableName, dt);
         }
@@ -525,6 +526,7 @@ namespace GaoJD.Club.Core
             Type t = typeof(T);
             MapperPropertyInfo[] mappers = SqlServerUtilities.GetMapperPropertyInfo<T>(entity);
             string[] fields = new string[0];
+
             string[] parameterized = new string[0];
             string sql = string.Empty;
             switch (operationType)

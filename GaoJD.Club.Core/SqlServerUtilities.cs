@@ -1,4 +1,6 @@
 ﻿using Dapper;
+using GaoJD.Club.Core.Cache;
+using GaoJD.Club.Core.Utility;
 using GaoJD.Club.Utility;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace GaoJD.Club.Core
 		/// 缓存反射的结果
 		/// </summary>
 		private static CachedHashtable m_cachedHashtable = new CachedHashtable();
+        private static MemoryCache memoryCache = new MemoryCache();
 
         /// <summary>
         /// 检查参数的值是否为空
@@ -29,7 +32,7 @@ namespace GaoJD.Club.Core
         public static void CheckNotEmpty<T>(T value, string paramName)
             where T : class
         {
-            Utilities.CheckNotEmpty<T>(value, paramName);
+            Utils.CheckNotEmpty<T>(value, paramName);
         }
         /// <summary>
         /// 获取实体映射的属性信息
@@ -42,6 +45,12 @@ namespace GaoJD.Club.Core
         {
             Type t = typeof(T);
             string key = t.FullName;
+
+            if (obj == null && memoryCache.GetValue<MapperPropertyInfo[]>(key) != null)
+            {
+                return memoryCache.GetValue<MapperPropertyInfo[]>(key);
+            }
+
             /*由于实例对象一致的几率很小，所以只针对类型反射的结果进行缓存*/
             if (obj == null && m_cachedHashtable[key] != null)
             {
@@ -73,14 +82,26 @@ namespace GaoJD.Club.Core
                 mapper.Name = properties[i].Name;
                 if (obj != null)
                 {
+
                     mapper.Value = fastProperties[properties[i]].Get(obj);
+                    // mapper.Value = fastProperties[properties[i]].GetMethod(obj);
+                    //fastProperties[properties[i]].Set(obj, (object)0);
+                    mapper.Value = properties[i].GetValue(obj);
+                    if (mapper.Value != null)
+                    {
+                        fastProperties[properties[i]].Set(obj, ((IConvertible)mapper.Value).ToType(properties[i].PropertyType, null));
+                        // fastProperties[properties[i]].SetMethod(obj, ((IConvertible)mapper.Value).ToType(properties[i].PropertyType, null));
+                    }
+
                 }
+
                 mappers.Add(mapper);
             }
             MapperPropertyInfo[] array = mappers.ToArray();
             if (obj == null)
             {
                 m_cachedHashtable.Add(key, array);
+                memoryCache.SetValue(key, array);
             }
             return array;
         }

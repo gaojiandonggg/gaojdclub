@@ -1,4 +1,5 @@
-﻿using GaoJD.Club.Logger;
+﻿using GaoJD.Club.Core.Logger;
+using GaoJD.Club.Logger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
@@ -15,10 +16,12 @@ namespace GaoJD.Club.OneTest.Filter
 
         Stopwatch sw;
         private readonly ILogger logger;
+        private readonly ILogger<LogFilter> _Logger;
 
-        public LogFilter(ILogger logger)
+        public LogFilter(ILogger logger, ILogger<LogFilter> _logger)
         {
             this.logger = logger;
+            _Logger = _logger;
         }
 
 
@@ -31,20 +34,22 @@ namespace GaoJD.Club.OneTest.Filter
             {
                 string json = JsonConvert.SerializeObject(aaa);
                 logger.Operate("Input", json);
+                _Logger.Log("input", json);
             }
-
+            else
+            {
+                _Logger.Log("input", "没有参数");
+            }
             base.OnActionExecuting(context);
-
         }
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var bbb = context.Result;
-
-
             if (bbb != null && bbb.GetType() == typeof(ObjectResult))
             {
                 logger.Operate("OutPut", JsonConvert.SerializeObject(((ObjectResult)bbb).Value));
+                _Logger.Log("output", JsonConvert.SerializeObject(((ObjectResult)bbb).Value));
             }
             sw.Stop();
             long aaa = sw.ElapsedMilliseconds;
