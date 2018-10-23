@@ -8,4 +8,8 @@
     <DocumentationFile>bin\Release\netcoreapp2.1\GaoJD.Club.BusinessEntity.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="protobuf-net" Version="2.4.0" />
+  </ItemGroup>
+
 </Project>

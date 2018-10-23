@@ -18,7 +18,7 @@ using GaoJD.Club.Dto;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
-using GaoJD.Club.Utility.Common;
+
 using Microsoft.Extensions.DependencyInjection;
 using GaoJD.Club.Core;
 using System.Net.Http;
@@ -97,7 +97,7 @@ namespace GaoJD.Club.OneTest.Controllers
         {
             //  throw new Exception("你好");
             //throw new ApplicationException("你好");
-            throw new OperationFailedException("你好");
+            //  throw new OperationFailedException("你好");
 
 
             try

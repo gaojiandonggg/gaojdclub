@@ -16,6 +16,16 @@ namespace GaoJD.Club.Core
         /// 设置属性的值
         /// </summary>
         private Action<object, object> m_Setter;
+
+        /// <summary>
+        /// 获取属性的值
+        /// </summary>
+        private MethodInfo Getter;
+        /// <summary>
+        /// 设置属性的值
+        /// </summary>
+        private MethodInfo Setter;
+
         /// <summary>
         /// 属性
         /// </summary>
@@ -29,6 +39,8 @@ namespace GaoJD.Club.Core
             m_propertyInfo = property;
             InitGetter();
             InitSetter();
+           // InitMethodGetter();
+           // InitMethodSetter();
         }
 
         /// <summary>
@@ -49,6 +61,27 @@ namespace GaoJD.Club.Core
         {
             m_Setter(instance, value);
         }
+
+        /// <summary>
+        /// 获取属性的值
+        /// </summary>
+        /// <param name="instance">实例对象</param>
+        /// <returns></returns>
+        public object GetMethod(object instance)
+        {
+            return Getter.Invoke(instance, null);
+        }
+        /// <summary>
+        /// 设置属性的值
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="value"></param>
+        public void SetMethod(object instance, object value)
+        {
+            Setter.Invoke(instance, new object[] { value });
+        }
+
+
         /// <summary>
         /// 属性
         /// </summary>
@@ -68,6 +101,7 @@ namespace GaoJD.Club.Core
             //将instanceParameter直接转换成定义属性的对象
             var instanceCast = Expression.Convert(instanceParameter, m_propertyInfo.DeclaringType);
             MethodInfo method = m_propertyInfo.GetGetMethod();
+
             var methodCall = Expression.Call(instanceCast, method);
             //将返回值强制转换成object
             var methodCast = Expression.Convert(methodCall, typeof(object));
@@ -88,5 +122,23 @@ namespace GaoJD.Club.Core
             var lambda = Expression.Lambda<Action<object, object>>(methodCall, instanceParameter, valueParameter);
             m_Setter = lambda.Compile();
         }
+
+
+        /// <summary>
+        /// 初始化Getter
+        /// </summary>
+        private void InitMethodGetter()
+        {
+            Getter = m_propertyInfo.GetGetMethod();
+
+        }
+        /// <summary>
+        /// 初始化Setter
+        /// </summary>
+        private void InitMethodSetter()
+        {
+            Setter = m_propertyInfo.GetSetMethod();
+        }
+
     }
 }

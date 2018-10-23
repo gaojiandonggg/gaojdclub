@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GaoJD.Club.Core;
 using GaoJD.Club.Logger;
+using GaoJD.Club.LogstashLogger;
 using GaoJD.Club.OneTest;
 using GaoJD.Club.OneTest.Extensions;
 using GaoJD.Club.OneTest.Filter;
@@ -72,7 +73,7 @@ namespace OneTest
             //     services.AddDbContext<TeacherClubContext>(options =>
             //options.UseMySql(Configuration.GetConnectionString("MySqlConnection")));
             // }
-
+            services.AddLogstashLogger();
             services.AddLogger();
             services.AddCors();
             services.AddSession();
@@ -90,7 +91,7 @@ namespace OneTest
                 options.Filters.Add(typeof(LogFilter));
                 options.Filters.Add(typeof(ModelValidateFilter));
                 options.Filters.Add(typeof(CustomExceptionFilterAttribute));
-
+                options.OutputFormatters.Add(new ProtobufFormatter());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_0);
 
 

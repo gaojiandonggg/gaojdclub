@@ -25,9 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaoJD.Club.Utility", "GaoJD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRDemo", "SignalRDemo\SignalRDemo.csproj", "{98AA06C6-485B-4982-8918-D523C506F13B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaoJD.Club.Dto", "GaoJD.Club.Dto\GaoJD.Club.Dto.csproj", "{7C97B70F-EE11-40A9-BFD8-399E4D432255}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GaoJD.Club.Dto", "GaoJD.Club.Dto\GaoJD.Club.Dto.csproj", "{7C97B70F-EE11-40A9-BFD8-399E4D432255}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{78B9FC32-3408-4005-BB23-4C4F7EDB4977}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaoJD.Club.LogstashLogger", "GaoJD.Club.LogstashLogger\GaoJD.Club.LogstashLogger.csproj", "{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +173,18 @@ Global
 		{78B9FC32-3408-4005-BB23-4C4F7EDB4977}.netstandard-Release|Any CPU.Build.0 = Release|Any CPU
 		{78B9FC32-3408-4005-BB23-4C4F7EDB4977}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78B9FC32-3408-4005-BB23-4C4F7EDB4977}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netfx-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netfx-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netfx-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netfx-Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netstandard-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netstandard-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netstandard-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.netstandard-Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +201,7 @@ Global
 		{98AA06C6-485B-4982-8918-D523C506F13B} = {27B402A9-D79A-44D6-A36F-C648043B5573}
 		{7C97B70F-EE11-40A9-BFD8-399E4D432255} = {A6364D28-657D-4B8E-A74C-D09D50329EA1}
 		{78B9FC32-3408-4005-BB23-4C4F7EDB4977} = {27B402A9-D79A-44D6-A36F-C648043B5573}
+		{BB3F4CE3-6BD7-4CC4-AABA-C5E9C0FC212B} = {A6364D28-657D-4B8E-A74C-D09D50329EA1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36B25B07-2275-4484-8B4E-6B73B1C6B952}

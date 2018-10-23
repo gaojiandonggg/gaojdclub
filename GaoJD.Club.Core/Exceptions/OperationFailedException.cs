@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GaoJD.Club.Utility.Common
+namespace GaoJD.Club.Core.Extensions
 {
     /// <summary>
 	/// 操作失败异常
