@@ -1,4 +1,5 @@
 ﻿using GaoJD.Club.Utility;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
@@ -15,17 +16,20 @@ namespace GaoJD.Club.Redis
 
         private static string _redisCustomKey = "";
         private AppConfigurtaionServices _AppConfigurtaionServices;
+        private readonly IConfiguration configuration;
         private static string _redisConnectionString = "";
-        public RedisClient(AppConfigurtaionServices AppConfigurtaionServices)
+        public RedisClient(AppConfigurtaionServices AppConfigurtaionServices, IConfiguration configuration)
         {
             this._AppConfigurtaionServices = AppConfigurtaionServices;
+            this.configuration = configuration;
             if (string.IsNullOrEmpty(_redisConnectionString))
             {
-                _redisConnectionString = string.Concat(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").CacheIP, ",password=", _AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").CachePassWord, ",allowAdmin=true");
+                _redisConnectionString = string.Concat(configuration.GetValue<string>("AppSettings:CacheIP"), ",password=", configuration.GetValue<string>("AppSettings:CachePassWord"), ",allowAdmin=true");
             }
             if (string.IsNullOrEmpty(_redisCustomKey))
             {
-                _redisCustomKey = _AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").RedisCustomKey;
+                //_redisCustomKey = _AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").RedisCustomKey;
+                _redisCustomKey = configuration.GetValue<string>("AppSettings:RedisCustomKey");
             }
         }
 

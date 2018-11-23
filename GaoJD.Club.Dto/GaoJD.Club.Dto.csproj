@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GaoJD.Club.Utility\GaoJD.Club.Utility.csproj" />
+    <ProjectReference Include="..\GaoJD.Club.Core\GaoJD.Club.Core.csproj" />
   </ItemGroup>
 
 </Project>

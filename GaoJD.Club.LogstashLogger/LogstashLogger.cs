@@ -2,6 +2,7 @@
 using GaoJD.Club.Core.Utility;
 using GaoJD.Club.Logic;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,13 @@ namespace GaoJD.Club.LogstashLogger
         public LogstashLogger(IConfiguration configuration) : base(configuration)
         {
             loggerConsumer = LoggerConsumer.Instance;
+            if (!loggerConsumer.IsStart)
+            {
+                loggerConsumer.Consumer(logs =>
+                {
+                    var str = JsonConvert.SerializeObject(logs);
+                });
+            }
         }
 
         public override void Log(string Type, string message)

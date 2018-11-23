@@ -103,6 +103,22 @@ namespace GaoJD.Club.OneTest.Controllers
             try
             {
 
+                List<int> list = new List<int>();
+
+                for (int i = 1; i <= 100; i++)
+                {
+                    list.Add(i);
+                }
+
+                List<int> result1 = list.FindAll(p => p == 3);
+
+                List<int> result = list.FindAll(
+                   delegate (int no)
+                   {
+                       return (no % 2 == 0);
+                   }
+                 );
+
                 //_accessor.HttpContext.Session.SetString("aaa", "bbb");
                 //HttpContext.Session.SetString("aaa", "bbb");
                 _UserLogic.Insert(usr);
