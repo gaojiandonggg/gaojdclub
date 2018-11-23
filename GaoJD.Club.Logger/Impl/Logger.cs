@@ -1,6 +1,7 @@
 ﻿using GaoJD.Club.Utility;
 using log4net;
 using MicroKnights.Logging;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,12 @@ namespace GaoJD.Club.Logger
         private ILog logger = LogManager.GetLogger("NETCoreRepository", typeof(Logger));
 
         private readonly AppConfigurtaionServices _AppConfigurtaionServices;
-        public Logger(AppConfigurtaionServices AppConfigurtaionServices)
+        private readonly IConfiguration configuration;
+
+        public Logger(AppConfigurtaionServices AppConfigurtaionServices, IConfiguration configuration)
         {
             this._AppConfigurtaionServices = AppConfigurtaionServices;
+            this.configuration = configuration;
         }
 
         #region 操作日志 - 通用
@@ -33,7 +37,7 @@ namespace GaoJD.Club.Logger
             {
                 LogMessage cpm = new LogMessage
                 {
-                    ApplicationID = Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
+                    ApplicationID = 0,//Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
                     ModuleName = methodInfo.DeclaringType.FullName,
                     MethodName = methodInfo.Name,
                     TargetID = targetID,
@@ -71,7 +75,7 @@ namespace GaoJD.Club.Logger
                 {
                     LogMessage cpm = new LogMessage
                     {
-                        ApplicationID = Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
+                        ApplicationID =0,// Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
                         ModuleName = methodInfo.DeclaringType.FullName,
                         MethodName = methodInfo.Name,
                         TargetID = targetID,
@@ -106,7 +110,7 @@ namespace GaoJD.Club.Logger
             {
                 LogMessage cpm = new LogMessage
                 {
-                    ApplicationID = Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
+                    ApplicationID =0,// Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
                     ModuleName = methodInfo.DeclaringType.FullName,
                     MethodName = methodInfo.Name,
                     TargetID = targetID,
@@ -139,7 +143,7 @@ namespace GaoJD.Club.Logger
             {
                 LogMessage cpm = new LogMessage
                 {
-                    ApplicationID = Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
+                    ApplicationID = 0,// Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
                     ModuleName = methodInfo.DeclaringType.FullName,
                     MethodName = methodInfo.Name,
                     TargetID = targetID,
@@ -184,7 +188,7 @@ namespace GaoJD.Club.Logger
             System.Reflection.MethodBase methodInfo = new System.Diagnostics.StackFrame(1).GetMethod();
             LogMessage errLog = new LogMessage()
             {
-                ApplicationID = Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
+                ApplicationID = 0,// Convert.ToInt32(_AppConfigurtaionServices.GetAppSettings<AppSettings>("AppSettings").ApplicationID),
                 Message = exBase.Message,
                 Function = methodInfo.DeclaringType.FullName + "." + methodInfo.Name,
                 StackTrace = exBase.StackTrace,

@@ -1,4 +1,5 @@
-﻿using GaoJD.Club.Utility;
+﻿
+using GaoJD.Club.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

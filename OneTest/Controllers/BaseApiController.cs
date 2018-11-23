@@ -12,11 +12,11 @@ using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using GaoJD.Club.OneTest;
 using GaoJD.Club.OneTest.Filter;
-
+using GaoJD.Club.Core.Utility;
 
 namespace OneTest.Controllers
 {
-    //[TypeFilter(typeof(ApiAuthenticationFilter))]
+    // [TypeFilter(typeof(ApiAuthenticationFilter))]
     public class BaseApiController : ControllerBase
     {
 
