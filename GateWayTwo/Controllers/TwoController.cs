@@ -12,9 +12,10 @@ namespace GateWayServiceTwo.Controllers
     {
     
         [HttpGet]
-        public string GetTwo()
+        public string[] GetTwo()
         {
-            return "我是第二个";
+            return new string[] { $"我是第二个: {DateTime.Now.ToString()} {Environment.MachineName} " +
+                                  $"OS: {Environment.OSVersion.VersionString}" };
         }
     }
 }

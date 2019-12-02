@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    string Username = "ceshi";
+
+
+    async Task<string> DoSomething(string x, string y)
+    {
+        return x + y;
+    }
+
+
+    Func<dynamic, object> petTemplate = @<p>You have a pet named @item.Name.</p>;
+}
+
+<h2>Index</h2>
+
+<p>@Username</p>
+<p>@DateTime.Now</p>
+
+
+
+<p>@("123")</p>
+
+
+<p>@@Username</p>
+
+<a href="mailto:Support@contoso.com">Support@contoso.com</a>
+
+
+<p>@await DoSomething("hello", "world")</p>
+
+
+<p>Last week this time: @(DateTime.Now - TimeSpan.FromDays(7))</p>
+
+<p>Last week: @DateTime.Now - TimeSpan.FromDays(7)</p>
+
+<p>Last week: @DateTime.Now - TimeSpan.FromDays[[[[[[[(7)</p>
+
+<p>Age@joe.Age</p>
+
+
+
+@("<span>Hello World</span>")
+
+
+@Html.Raw("<span>Hello World</span>")
+
+
+
+@{
+    var inCSharp = true;
+    <p>Now in HTML, was in C# @inCSharp</p>
+}
+
+
+
+@for (var i = 0; i < 5; i++)
+{
+
+    <text>Name: @i</text>
+}
+
+
+@for (var i = 0; i < 5; i++)
+{
+
+    @:Name: @i
+}
+
+

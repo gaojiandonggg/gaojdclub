@@ -61,10 +61,8 @@ namespace GaoJD.Club.Core.Logger
                                     {
                                         _consumerAction(_buffer);
                                     }
-                                    catch (Exception)
+                                    catch (Exception ex)
                                     {
-
-                                        throw;
                                     }
                                     _buffer.Clear();
                                 }
@@ -78,10 +76,8 @@ namespace GaoJD.Club.Core.Logger
                                 {
                                     _consumerAction(_buffer);
                                 }
-                                catch (Exception)
+                                catch (Exception ex)
                                 {
-
-                                    throw;
                                 }
                                 _buffer.Clear();
                             }
