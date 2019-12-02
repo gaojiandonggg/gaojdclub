@@ -31,5 +31,9 @@ namespace GateWayServiceOne.Controllers
             count++;
             return "我是第一个";
         }
+        public IActionResult health()
+        {
+            return Ok();
+        }
     }
 }

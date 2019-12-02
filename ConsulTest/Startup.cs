@@ -33,7 +33,7 @@ namespace ConsulTest
             });
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,7 +62,7 @@ namespace ConsulTest
             var address = features.Get<IServerAddressesFeature>().Addresses.First();
             var uri = new Uri(address);
 
-            var consulClient = new ConsulClient(x => x.Address = new Uri($"http://localhost:8500/"));//请求注册的 Consul 地址
+            var consulClient = new ConsulClient(x => x.Address = new Uri($"http://10.98.24.53:8500/"));//请求注册的 Consul 地址
             var httpCheck = new AgentServiceCheck()
             {
                 DeregisterCriticalServiceAfter = TimeSpan.FromSeconds(5),//服务启动多久后注册

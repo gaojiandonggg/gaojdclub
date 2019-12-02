@@ -1,15 +1,64 @@
-﻿{
+﻿//{
+//  "ReRoutes": [
+//    // API:CAS.ClientService
+//    {
+//      "DownstreamPathTemplate": "/{url}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": "5001"
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/One/{url}",
+//      "UpstreamHttpMethod": [ "Get", "Post" ],
+//      "FileCacheOptions": {
+//        "TtlSeconds": 10,
+//        "Region": ""
+//      },
+//      "RateLimitOptions": {
+//        "ClientWhitelist": [ "admin" ], // 白名单
+//        "EnableRateLimiting": true, // 是否启用限流
+//        "Period": "1m", // 统计时间段：1s, 5m, 1h, 1d
+//        "PeriodTimespan": 15, // 多少秒之后客户端可以重试
+//        "Limit": 5, // 在统计时间段内允许的最大请求数量
+//        "QuotaExceededMessage": "Too many requests, are you OK?", // 当请求过载被截断时返回的消息
+//        "HttpStatusCode": 999 // 当请求过载被截断时返回的http status
+//      },
+//      "QoSOptions": {
+//        "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
+//        "DurationOfBreak": 5000, // 熔断的时间，单位为毫秒
+//        "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
+//      }
+//    },
+//    // API:CAS.ProductService
+//    {
+//      "DownstreamPathTemplate": "/{url}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "localhost",
+//          "Port": "5000"
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Two/{url}",
+//      "UpstreamHttpMethod": [ "Get", "Post" ]
+//    }
+
+//  ]
+//}
+
+{
   "ReRoutes": [
     // API:CAS.ClientService
     {
+      "UseServiceDiscovery": true, // use Consul service discovery
       "DownstreamPathTemplate": "/{url}",
       "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": "5001"
-        }
-      ],
+      "ServiceName": "One",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
       "UpstreamPathTemplate": "/One/{url}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
       "FileCacheOptions": {
@@ -29,21 +78,29 @@
         "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
         "DurationOfBreak": 5000, // 熔断的时间，单位为毫秒
         "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
-      }
+      },
+      "ReRoutesCaseSensitive": false // non case sensitive
     },
     // API:CAS.ProductService
     {
+      "UseServiceDiscovery": true, // use Consul service discovery
       "DownstreamPathTemplate": "/{url}",
       "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": "5000"
-        }
-      ],
+      "ServiceName": "Two",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
       "UpstreamPathTemplate": "/Two/{url}",
-      "UpstreamHttpMethod": [ "Get", "Post" ]
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "ReRoutesCaseSensitive": false // non case sensitive
     }
 
-  ]
+  ],
+  "GlobalConfiguration": {
+    //"BaseUrl": "https://api.mybusiness.com"
+    "ServiceDiscoveryProvider": {
+      "Host": "10.98.24.53", // Consul Service IP
+      "Port": 8500 // Consul Service Port
+    }
+  }
 }
