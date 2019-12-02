@@ -15,9 +15,10 @@ namespace GateWayServiceOne.Controllers
 
       
         [HttpGet]
-        public string GetOne()
+        public string[] GetOne()
         {
-            return "我是第一个";
+            return new string[] { $"我是第一个: {DateTime.Now.ToString()} {Environment.MachineName} " +
+                                  $"OS: {Environment.OSVersion.VersionString}" };
         }
 
         [HttpGet]
